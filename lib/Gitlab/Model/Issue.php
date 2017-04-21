@@ -50,7 +50,7 @@ class Issue extends AbstractModel implements Noteable
      */
     public static function fromArray(Client $client, Project $project, array $data)
     {
-        $issue = new static($project, $data['id'], $client);
+        $issue = new static($project, $data['iid'], $client);
 
         if (isset($data['author'])) {
             $data['author'] = User::fromArray($client, $data['author']);
@@ -65,14 +65,14 @@ class Issue extends AbstractModel implements Noteable
 
     /**
      * @param Project $project
-     * @param int $id
+     * @param int $iid
      * @param Client $client
      */
-    public function __construct(Project $project, $id = null, Client $client = null)
+    public function __construct(Project $project, $iid = null, Client $client = null)
     {
         $this->setClient($client);
         $this->setData('project', $project);
-        $this->setData('id', $id);
+        $this->setData('iid', $iid);
     }
 
     /**
@@ -80,7 +80,7 @@ class Issue extends AbstractModel implements Noteable
      */
     public function show()
     {
-        $data = $this->api('issues')->show($this->project->id, $this->id);
+        $data = $this->api('issues')->show($this->project->id, $this->iid);
 
         return static::fromArray($this->getClient(), $this->project, $data);
     }
@@ -91,7 +91,7 @@ class Issue extends AbstractModel implements Noteable
      */
     public function update(array $params)
     {
-        $data = $this->api('issues')->update($this->project->id, $this->id, $params);
+        $data = $this->api('issues')->update($this->project->id, $this->iid, $params);
 
         return static::fromArray($this->getClient(), $this->project, $data);
     }
@@ -135,7 +135,7 @@ class Issue extends AbstractModel implements Noteable
      */
     public function addComment($comment)
     {
-        $data = $this->api('issues')->addComment($this->project->id, $this->id, array(
+        $data = $this->api('issues')->addComment($this->project->id, $this->iid, array(
             'body' => $comment
         ));
 
@@ -148,7 +148,7 @@ class Issue extends AbstractModel implements Noteable
     public function showComments()
     {
         $notes = array();
-        $data = $this->api('issues')->showComments($this->project->id, $this->id);
+        $data = $this->api('issues')->showComments($this->project->id, $this->iid);
 
         foreach ($data as $note) {
             $notes[] = Note::fromArray($this->getClient(), $this, $note);
@@ -167,5 +167,27 @@ class Issue extends AbstractModel implements Noteable
         }
 
         return false;
+    }
+
+    /**
+     * @return Issue
+     */
+    public function subscribe()
+    {
+        $data = $this->api('issues')->subscribe($this->project->id, $this->iid);
+
+        // API will return 304 when already subscribed
+        return $data ? static::fromArray($this->getClient(), $this->project, $data) : $this;
+    }
+
+    /**
+     * @return Issue
+     */
+    public function unsubscribe()
+    {
+        $data = $this->api('issues')->unsubscribe($this->project->id, $this->iid);
+
+        // API will return 304 when already unsubscribe
+        return $data ? static::fromArray($this->getClient(), $this->project, $data) : $this;
     }
 }
