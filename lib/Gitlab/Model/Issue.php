@@ -190,4 +190,13 @@ class Issue extends AbstractModel implements Noteable
         // API will return 304 when already unsubscribe
         return $data ? static::fromArray($this->getClient(), $this->project, $data) : $this;
     }
+
+    /**
+     * @param string $label
+     * @return bool
+     */
+    public function hasLabel($label)
+    {
+        return in_array($label, $this->labels);
+    }
 }
