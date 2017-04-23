@@ -660,12 +660,12 @@ class Project extends AbstractModel
     }
 
     /**
-     * @param int $id
+     * @param int $iid
      * @return MergeRequest
      */
-    public function mergeRequest($id)
+    public function mergeRequest($iid)
     {
-        $mr = new MergeRequest($this, $id, $this->getClient());
+        $mr = new MergeRequest($this, $iid, $this->getClient());
 
         return $mr->show();
     }
@@ -686,46 +686,46 @@ class Project extends AbstractModel
     }
 
     /**
-     * @param int $id
+     * @param int $iid
      * @param array $params
      * @return MergeRequest
      */
-    public function updateMergeRequest($id, array $params)
+    public function updateMergeRequest($iid, array $params)
     {
-        $mr = new MergeRequest($this, $id, $this->getClient());
+        $mr = new MergeRequest($this, $iid, $this->getClient());
 
         return $mr->update($params);
     }
 
     /**
-     * @param int $id
+     * @param int $iid
      * @return MergeRequest
      */
-    public function closeMergeRequest($id)
+    public function closeMergeRequest($iid)
     {
-        $mr = new MergeRequest($this, $id, $this->getClient());
+        $mr = new MergeRequest($this, $iid, $this->getClient());
 
         return $mr->close();
     }
 
     /**
-     * @param int $id
+     * @param int $iid
      * @return MergeRequest
      */
-    public function openMergeRequest($id)
+    public function openMergeRequest($iid)
     {
-        $mr = new MergeRequest($this, $id, $this->getClient());
+        $mr = new MergeRequest($this, $iid, $this->getClient());
 
         return $mr->reopen();
     }
 
     /**
-     * @param int $id
+     * @param int $iid
      * @return MergeRequest
      */
-    public function mergeMergeRequest($id)
+    public function mergeMergeRequest($iid)
     {
-        $mr = new MergeRequest($this, $id, $this->getClient());
+        $mr = new MergeRequest($this, $iid, $this->getClient());
 
         return $mr->merge();
     }
@@ -912,7 +912,7 @@ class Project extends AbstractModel
 
     /**
      * @param int $id
-     * @return Snippet
+     * @return string
      */
     public function snippetContent($id)
     {

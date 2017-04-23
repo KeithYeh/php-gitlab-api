@@ -49,7 +49,7 @@ class Projects extends AbstractApi
      */
     public function owned($page = 1, $per_page = self::PER_PAGE, $order_by = self::ORDER_BY, $sort = self::SORT)
     {
-        return $this->get('projects?owned=1', array(
+        return $this->get('projects?owned=true', array(
             'page' => $page,
             'per_page' => $per_page,
             'order_by' => $order_by,

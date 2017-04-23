@@ -85,12 +85,12 @@ class MergeRequests extends AbstractApi
 
     /**
      * @param int $project_id
-     * @param int $mr_id
+     * @param int $mr_iid
      * @return mixed
      */
-    public function show($project_id, $mr_id)
+    public function show($project_id, $mr_iid)
     {
-        return $this->get($this->getProjectPath($project_id, 'merge_request/'.$this->encodePath($mr_id)));
+        return $this->get($this->getProjectPath($project_id, 'merge_requests/'.$this->encodePath($mr_iid)));
     }
 
     /**
@@ -117,22 +117,22 @@ class MergeRequests extends AbstractApi
 
     /**
      * @param int $project_id
-     * @param int $mr_id
+     * @param int $mr_iid
      * @param array $params
      * @return mixed
      */
-    public function update($project_id, $mr_id, array $params)
+    public function update($project_id, $mr_iid, array $params)
     {
-        return $this->put($this->getProjectPath($project_id, 'merge_request/'.$this->encodePath($mr_id)), $params);
+        return $this->put($this->getProjectPath($project_id, 'merge_requests/'.$this->encodePath($mr_iid)), $params);
     }
 
     /**
      * @param int $project_id
-     * @param int $mr_id
+     * @param int $mr_iid
      * @param string $message
      * @return mixed
      */
-    public function merge($project_id, $mr_id, $message = null)
+    public function merge($project_id, $mr_iid, $message = null)
     {
         if (is_array($message)) {
             $params = $message;
@@ -140,33 +140,34 @@ class MergeRequests extends AbstractApi
             $params = array('merge_commit_message' => $message);
         }
 
-        return $this->put($this->getProjectPath($project_id, 'merge_request/'.$this->encodePath($mr_id).'/merge'), $params);
+        return $this->put($this->getProjectPath($project_id, 'merge_requests/'.$this->encodePath($mr_iid).'/merge'), $params);
     }
 
     /**
      * @param int $project_id
-     * @param int $mr_id
+     * @param int $mr_iid
      * @return mixed
      */
-    public function showNotes($project_id, $mr_id, $page = 1, $per_page = self::PER_PAGE, $order_by = self::ORDER_BY, $sort = 'desc')
+    public function showNotes($project_id, $mr_iid, $page = 1, $per_page = self::PER_PAGE, $order_by = self::ORDER_BY, $sort = 'desc')
     {
-        return $this->getList($project_id, null, $page, $per_page, $order_by, $sort, 'merge_requests/'.$this->encodePath($mr_id).'/notes');
+        return $this->getList($project_id, null, $page, $per_page, $order_by, $sort, 'merge_requests/'.$this->encodePath($mr_iid).'/notes');
     }
 
     /**
      * @param int $project_id
-     * @param int $mr_id
+     * @param int $mr_iid
      * @param string $note
      * @return mixed
      */
-    public function addNote($project_id, $mr_id, $note)
+    public function addNote($project_id, $mr_iid, $note)
     {
-        return $this->post($this->getProjectPath($project_id, 'merge_requests/'.$this->encodePath($mr_id).'/notes'), array(
+        return $this->post($this->getProjectPath($project_id, 'merge_requests/'.$this->encodePath($mr_iid).'/notes'), array(
             'body' => $note
         ));
     }
 
     /**
+     * @deprecated since v8.17.0
      * @param int $project_id
      * @param int $mr_id
      * @return mixed
@@ -177,6 +178,7 @@ class MergeRequests extends AbstractApi
     }
 
     /**
+     * @deprecated since v8.17.0
      * @param int $project_id
      * @param int $mr_id
      * @param string $note
@@ -191,12 +193,12 @@ class MergeRequests extends AbstractApi
 
     /**
      * @param int $project_id
-     * @param int $mr_id
+     * @param int $mr_iid
      * @return mixed
      */
-    public function changes($project_id, $mr_id)
+    public function changes($project_id, $mr_iid)
     {
-        return $this->get($this->getProjectPath($project_id, 'merge_request/'.$this->encodePath($mr_id).'/changes'));
+        return $this->get($this->getProjectPath($project_id, 'merge_requests/'.$this->encodePath($mr_iid).'/changes'));
     }
 
     /**
@@ -211,11 +213,31 @@ class MergeRequests extends AbstractApi
 
     /**
      * @param int $project_id
-     * @param int $mr_id
+     * @param int $mr_iid
      * @return mixed
      */
-    public function commits($project_id, $mr_id)
+    public function commits($project_id, $mr_iid)
     {
-        return $this->get($this->getProjectPath($project_id, 'merge_request/'.$this->encodePath($mr_id).'/commits'));
+        return $this->get($this->getProjectPath($project_id, 'merge_requests/'.$this->encodePath($mr_iid).'/commits'));
+    }
+
+    /**
+     * @param int $project_id
+     * @param int $mr_iid
+     * @return mixed
+     */
+    public function subscribe($project_id, $mr_iid)
+    {
+        return $this->post($this->getProjectPath($project_id, 'merge_requests/'.$this->encodePath($mr_iid).'/subscribe'));
+    }
+
+    /**
+     * @param int $project_id
+     * @param int $mr_iid
+     * @return mixed
+     */
+    public function unsubscribe($project_id, $mr_iid)
+    {
+        return $this->post($this->getProjectPath($project_id, 'merge_requests/'.$this->encodePath($mr_iid).'/unsubscribe'));
     }
 }
